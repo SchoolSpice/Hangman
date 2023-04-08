@@ -94,9 +94,6 @@ public class Game {
 					log("new game");
 					return GameStatus.OPEN;
 				}
-				// if (!letterEntered) {
-                // 	return GameStatus.OPEN;
-            	// }
 				else if (index != -1){
 					log("good guess");
 					return GameStatus.GOOD_GUESS;
