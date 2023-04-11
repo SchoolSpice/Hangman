@@ -44,6 +44,13 @@
 				</Label>
 				<TextField fx:id="textField" GridPane.columnIndex="1">
 				</TextField>
+				<Label fx:id="userInputLabel" GridPane.rowIndex="1">
+					<styleClass>
+						<String fx:value="status"/>
+					</styleClass>
+				</Label>
+				<TextField fx:id="inputTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+				</TextField>
 			</GridPane>
 		</VBox>
 	</bottom>
