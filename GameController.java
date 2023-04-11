@@ -36,7 +36,11 @@ public class GameController {
 	@FXML
 	private Label enterALetterLabel ;
 	@FXML
+	private Label userInputLabel ;
+	@FXML
 	private TextField textField ;
+	@FXML
+	private TextField inputTextField ;
 
     public void initialize() throws IOException {
 		System.out.println("in initialize");
@@ -50,6 +54,7 @@ public class GameController {
 			@Override
 			public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
 				if(newValue.length() > 0) {
+					inputTextField.setText(inputTextField.getText() + textField.getText());
 					System.out.print(newValue);
 					game.makeMove(newValue);
 					textField.clear();
@@ -63,6 +68,7 @@ public class GameController {
 		System.out.println("in setUpStatusLabelBindings");
 		statusLabel.textProperty().bind(Bindings.format("%s", game.gameStatusProperty()));
 		enterALetterLabel.textProperty().bind(Bindings.format("%s", "Enter a letter:"));
+		userInputLabel.textProperty().bind(Bindings.format("%s", "User Input:"));
 		/*	Bindings.when(
 					game.currentPlayerProperty().isNotNull()
 			).then(
@@ -88,10 +94,13 @@ public class GameController {
 		board.getChildren().add(line);
 		board.getChildren().add(c);
 
+		inputTextField.setEditable(false);
+
 	}
 		
 	@FXML 
 	private void newHangman() {
+		inputTextField.setText("");
 		game.reset();
 	}
 
