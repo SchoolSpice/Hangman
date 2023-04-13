@@ -20,6 +20,7 @@ public class Game {
 	private int index;
 	private final ReadOnlyObjectWrapper<GameStatus> gameStatus;
 	private ObjectProperty<Boolean> gameState = new ReadOnlyObjectWrapper<Boolean>();
+	private final ReadOnlyObjectWrapper<String> wordDisplay;
 
 	public enum GameStatus {
 		GAME_OVER {
@@ -49,6 +50,12 @@ public class Game {
 			public String toString() {
 				return "Game on, let's go!";
 			}
+		},
+		ERROR{
+			@Override
+			public String toString(){
+				return "Error! Please try again!";
+			}
 		}
 	}
 
@@ -70,9 +77,11 @@ public class Game {
 		prepLetterAndPosArray();
 		moves = 0;
 
-		gameState.setValue(false); // initial state
+		gameState.setValue(true); // initial state
 		letterEntered = false; //flag that user entered something
 
+		//word display shows the word they need to guess with blanks being filled
+		wordDisplay = new ReadOnlyObjectWrapper<String>(this, "wordDisplay", getInitialWordDisplay());
 		createGameStatusBinding();
 	}
 
@@ -89,24 +98,31 @@ public class Game {
 				if(check != null ) {
 					return check;
 				}
-
-				if((tmpAnswer.trim().length() == 0) && !letterEntered){
+				if(tmpAnswer.trim().length() == 0 && !letterEntered) {
 					log("new game");
 					return GameStatus.OPEN;
-				}
-				else if (index != -1){
-					log("good guess");
-					return GameStatus.GOOD_GUESS;
-				}
-				else {
+				}else if (moves == numOfTries()) {
+					log("game over in binding");
+					return GameStatus.GAME_OVER;
+				}else if (index == -1 && moves <= 5) {
 					moves++;
-					log("bad guess");
+					log("bad guess moves: " + moves);
 					return GameStatus.BAD_GUESS;
 					//printHangman();
+				} else if (index != -1) {
+					log("good guess");
+					return GameStatus.GOOD_GUESS;
+				} else {
+					log("error");
+					return GameStatus.ERROR;
 				}
 			}
 		};
 		gameStatus.bind(gameStatusBinding);
+	}
+
+	public ReadOnlyObjectProperty<String> wordDisplayProperty() {
+	    return wordDisplay.getReadOnlyProperty();
 	}
 
 	public ReadOnlyObjectProperty<GameStatus> gameStatusProperty() {
@@ -136,42 +152,57 @@ public class Game {
 		}
 	}
 
-	private int getValidIndex(String input) {
-		int index = -1;
-		for(int i = 0; i < letterAndPosArray.length; i++) {
-			if(letterAndPosArray[i].equals(input)) {
-				index = i;
-				letterAndPosArray[i] = "";
-				break;
-			}
-		}
-		return index;
+	private String getInitialWordDisplay() {
+	    StringBuilder sb = new StringBuilder();
+	    for (int i = 0; i < tmpAnswer.length(); i++) {
+	        if (tmpAnswer.charAt(i) != ' ') {
+	            sb.append(tmpAnswer.charAt(i)).append(' ');
+	        } else {
+	            sb.append("_ ");
+	        }
+	    }
+	    return sb.toString().trim();
+	}
+
+	private List<Integer> getValidIndices(String input) {
+	    List<Integer> indices = new ArrayList<>();
+	    for (int i = 0; i < letterAndPosArray.length; i++) {
+	        if (letterAndPosArray[i].equals(input)) {
+	            indices.add(i);
+	            letterAndPosArray[i] = "";
+	        }
+	    }
+	    return indices;
 	}
 
 	private int update(String input) {
-		int index = getValidIndex(input);
-		if(index != -1) {
-			StringBuilder sb = new StringBuilder(tmpAnswer);
-			sb.setCharAt(index, input.charAt(0));
-			tmpAnswer = sb.toString();
-		}
-		return index;
+	    List<Integer> indices = getValidIndices(input);
+	    if (!indices.isEmpty()) {
+	        StringBuilder sb = new StringBuilder(tmpAnswer);
+	        for (int index : indices) {
+	            sb.setCharAt(index, input.charAt(0));
+	        }
+	        tmpAnswer = sb.toString();
+	        wordDisplay.set(getInitialWordDisplay());
+	        return indices.size();
+	    } else {
+	        return -1;
+	    }
 	}
 
 	private static void drawHangmanFrame() {}
 
 	public void makeMove(String letter) {
-		log("\nin makeMove: " + letter);
-		index = update(letter);
-		letterEntered = true;
+		log("\nin makeMove: " + letter.toLowerCase());
+		index = update(letter.toLowerCase());
+		letterEntered = true; //flag to start bad/good guess 
 		// this will toggle the state of the game
 		gameState.setValue(!gameState.getValue());
-		// log(Boolean.toString(gameState.getValue()));
 	}
 
 	public void reset() {
 		// reset the game state
-	    gameState.setValue(false);
+	    gameState.setValue(true);
 	    // reset other game variables
 	    moves = 0;
 	    index = -1;
@@ -179,6 +210,8 @@ public class Game {
 	    setRandomWord();
 	    prepTmpAnswer();
 	    prepLetterAndPosArray();
+	    getInitialWordDisplay();
+	    wordDisplay.set(getInitialWordDisplay());
 	    createGameStatusBinding();
 	}
 
@@ -196,11 +229,11 @@ public class Game {
 			log("won");
 			return GameStatus.WON;
 		}
-		else if(moves == numOfTries()) {
-			log("game over");
-			return GameStatus.GAME_OVER;
-		}
 		else {
+			if(moves == numOfTries()){
+				tmpAnswer = answer;
+				wordDisplay.set(getInitialWordDisplay());
+			}
 			return null;
 		}
 	}
