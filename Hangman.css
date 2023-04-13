@@ -1,9 +1,17 @@
+@font-face {
+	font-family: 'Chalkduster';
+	src: url(https://fonts.cdnfonts.com/s/39881/Chalkduster.woff);
+}
+
 .root {
-	-fx-font-family: "Comic Sans MS" ;	
-	-fx-background-color: lightgoldenrodyellow ;
+	/* -fx-font-family: "Comic Sans MS" ;	 */
+	-fx-font-family: "Chalkduster" ;
+	-fx-background-color: rgb(56, 56, 56) ;
 }
 .hangman-board {
-	-fx-background-color: saddlebrown ;
+	/* -fx-background-color: saddlebrown ; */
+	-fx-background-image: url("https://img.freepik.com/free-photo/design-space-paper-textured-background_53876-42312.jpg?w=2000");
+	/* -fx-background-color: #cccccc; */
 	-fx-padding: 15px ;
 	-fx-alignment: center ;
 }
@@ -23,5 +31,18 @@
 
 .status {
 	-fx-font-size: 24pt ;
-	-fx-text-fill: sandybrown ;
+	-fx-text-fill: white ;
+}
+
+#textField{
+	-fx-background-image: url("https://img.freepik.com/free-photo/design-space-paper-textured-background_53876-42312.jpg?w=2000");
+	
+}
+
+#textArea{
+	-fx-background-image: url("https://img.freepik.com/free-photo/design-space-paper-textured-background_53876-42312.jpg?w=2000");
+	/* -fx-min-width: 50pt;
+	-fx-min-height: 75pt; */
+	-fx-padding: 10px;
+	-fx-font-size: 16pt;
 }
