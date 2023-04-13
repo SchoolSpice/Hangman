@@ -225,15 +225,16 @@ public class Game {
 
 	private GameStatus checkForWinner(int status) {
 		log("in checkForWinner");
-		if(tmpAnswer.equals(answer)) {
+		if(moves >= numOfTries()){
+				tmpAnswer = answer;
+				wordDisplay.set(getInitialWordDisplay());
+				return GameStatus.GAME_OVER;
+		}
+		else if(tmpAnswer.equals(answer)) {
 			log("won");
 			return GameStatus.WON;
 		}
 		else {
-			if(moves == numOfTries()){
-				tmpAnswer = answer;
-				wordDisplay.set(getInitialWordDisplay());
-			}
 			return null;
 		}
 	}
