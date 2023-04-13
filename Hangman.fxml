@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Label?>
 <?import java.lang.String?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.GridPane?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml">
@@ -26,6 +27,7 @@
 			<styleClass>
 				<String fx:value="hangman-board"/>
 			</styleClass>
+			<Label fx:id="wordDisplayLabel" text="${game.wordDisplay}" />
 		</VBox>
 	</center>
 	
@@ -37,20 +39,20 @@
 				</styleClass>
 			</Label>
 			<GridPane>
-				<Label fx:id="enterALetterLabel" GridPane.columnIndex="0">
+				<Label fx:id="enterALetterLabel" GridPane.rowIndex="1" GridPane.columnIndex="0">
 					<styleClass>
 						<String fx:value="status"/>
 					</styleClass>
 				</Label>
-				<TextField fx:id="textField" GridPane.columnIndex="1">
+				<TextField fx:id="textField" GridPane.rowIndex="1" GridPane.columnIndex="1">
 				</TextField>
-				<Label fx:id="userInputLabel" GridPane.rowIndex="1">
+				<Label fx:id="userInputLabel" GridPane.rowIndex="2" GridPane.columnIndex="0">
 					<styleClass>
 						<String fx:value="status"/>
 					</styleClass>
 				</Label>
-				<TextField fx:id="inputTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
-				</TextField>
+				<TextArea fx:id="textArea" GridPane.rowIndex="2" GridPane.columnIndex="1">
+				</TextArea>
 			</GridPane>
 		</VBox>
 	</bottom>
