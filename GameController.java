@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -40,13 +41,18 @@ public class GameController {
 	@FXML
 	private TextField textField ;
 	@FXML
-	private TextField inputTextField ;
+	private TextArea textArea ;
+	@FXML
+	private Label wordDisplayLabel ;
+
 
     public void initialize() throws IOException {
 		System.out.println("in initialize");
 		drawHangman();
 		addTextBoxListener();
 		setUpStatusLabelBindings();
+		wordDisplayLabel.textProperty().bind(game.wordDisplayProperty());
+		wordDisplayLabel.setStyle("-fx-font-size: 40px;");
 	}
 
 	private void addTextBoxListener() {
@@ -54,13 +60,25 @@ public class GameController {
 			@Override
 			public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
 				if(newValue.length() > 0) {
-					inputTextField.setText(inputTextField.getText() + textField.getText());
+					textArea.setText(textArea.getText() + textField.getText());
 					System.out.print(newValue);
 					game.makeMove(newValue);
 					textField.clear();
+					
 				}
 			}
 		});
+
+		// textArea.textProperty().addListener(new ChangeListener<String>() {
+		// 	@Override
+		// 	public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+		// 		if(newValue.length() > 0) {
+		// 			System.out.print(newValue);
+		// 			game.makeMove(newValue);
+		// 			//textField.clear();
+		// 		}
+		// 	}
+		// });
 	}
 
 	private void setUpStatusLabelBindings() {
@@ -94,13 +112,18 @@ public class GameController {
 		board.getChildren().add(line);
 		board.getChildren().add(c);
 
-		inputTextField.setEditable(false);
+		wordDisplayLabel = new Label();
+    	board.getChildren().add(wordDisplayLabel);
+
+		textArea.setPrefSize(225, 100);
+		textArea.setEditable(false);
+		textArea.setWrapText(true);
 
 	}
 		
 	@FXML 
 	private void newHangman() {
-		inputTextField.setText("");
+		textArea.clear();
 		game.reset();
 	}
 
