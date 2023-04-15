@@ -62,6 +62,17 @@ public class Game {
 		}
 	}
 
+	public int getMoves(){
+		return moves;
+	}
+
+	public String getAnswer(){
+		if(answer!=null){
+			return answer;
+		}
+		return null;
+	}
+
 	public Game() {
 		gameStatus = new ReadOnlyObjectWrapper<GameStatus>(this, "gameStatus", GameStatus.OPEN);
 		gameStatus.addListener(new ChangeListener<GameStatus>() {
@@ -215,8 +226,8 @@ public class Game {
 	    }
 	}
 
-	private void drawHangmanFrame() {
-	}
+	// private void drawHangmanFrame() {
+	// }
 
 	public void makeMove(String letter) {
 		log("\nin makeMove: " + letter.toLowerCase());
@@ -242,7 +253,7 @@ public class Game {
 	}
 
 	private int numOfTries() {
-		return 5; // TODO, fix me
+		return 5;
 	}
 
 	public static void log(String s) {
