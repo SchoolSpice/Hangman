@@ -12,6 +12,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.Group;
+
 
 public class GameController {
 
@@ -100,17 +102,28 @@ public class GameController {
 
 	private void drawHangman() {
 
-		Line line = new Line();
-		line.setStartX(25.0f);
-		line.setStartY(0.0f);
-		line.setEndX(25.0f);
-		line.setEndY(25.0f);
+		Line x1=new Line(0,50,150,50);
+        Line y1=new Line(0,50,0,300);
+        Line y2=new Line(105,50,105,100);
+        Line x2=new Line(-75,300,150,300);
+        Circle head = new Circle();
+        head.setRadius(15);
+        System.out.println(y2.getEndY());
+        head.setCenterX(y2.getEndX());
+        head.setCenterY(y2.getEndY());
 
-		Circle c = new Circle();
-		c.setRadius(10);
 
-		board.getChildren().add(line);
-		board.getChildren().add(c);
+        Line rightHand=new Line(105, 120, 155, 155);
+        Line body=new Line(105, 110, 105, 210);
+        Line leftHand=new Line(105, 120, 55, 155);
+
+        Line rightLeg=new Line(105, 210, 155, 245);
+        Line leftLeg=new Line(105, 210, 55, 245);
+
+        Group group=new Group();
+        group.getChildren().addAll(x2,x1,y1,y2,head,rightHand,body,leftHand,rightLeg,leftLeg);
+
+        board.getChildren().add(group);
 
 		wordDisplayLabel = new Label();
     	board.getChildren().add(wordDisplayLabel);
