@@ -34,6 +34,15 @@
 	-fx-text-fill: white ;
 }
 
+/* Gradient texture */
+.grainy {
+    -fx-stroke-dasharray: 10, 5;
+    -fx-stroke-dash-offset: 0;
+    -fx-stroke-width: 2px;
+    -fx-stroke: black;
+    -fx-effect: dropshadow(gaussian, black, 2, 0, 0, 1), dropshadow(gaussian, white, 1, 0, 0, -1);
+}
+
 #textField{
 	-fx-background-image: url("https://img.freepik.com/free-photo/design-space-paper-textured-background_53876-42312.jpg?w=2000");
 	
