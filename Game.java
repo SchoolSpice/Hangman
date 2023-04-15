@@ -8,13 +8,16 @@ import javafx.beans.value.ObservableValue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class Game {
 
 	private String answer;
 	private String tmpAnswer;
 	private String[] letterAndPosArray;
-	private String[] words;
+	private ArrayList<String> words = new ArrayList<String>(0);
 	private Boolean letterEntered;
 	private int moves;
 	private int index;
@@ -72,6 +75,7 @@ public class Game {
 			}
 
 		});
+		readFile();
 		setRandomWord();
 		prepTmpAnswer();
 		prepLetterAndPosArray();
@@ -132,9 +136,30 @@ public class Game {
 		return gameStatus.get();
 	}
 
+	private void readFile() {
+		try {
+			File file = new File("words.txt");
+			Scanner scanner = new Scanner(file);
+			String wordFromFile = "";
+			while (scanner.hasNextLine()) {
+				wordFromFile = scanner.nextLine().trim();
+				this.words.add(wordFromFile);
+			}
+		} catch (FileNotFoundException ex) {
+			log("\nunable to read file. answer is now apple");
+		}
+
+	}
+
 	private void setRandomWord() {
-		//int idx = (int) (Math.random() * words.length);
-		answer = "apple";//words[idx].trim(); // remove new line character
+		// int idx = (int) (Math.random() * words.length);
+		int index = (int) (Math.random() * words.size());
+		if (words.size() == 0) {
+			answer = "apple";
+		} else {
+			answer = words.get(index);
+		}
+		log("\nin setRandomWord: answer = " + answer);
 	}
 
 	private void prepTmpAnswer() {
@@ -190,7 +215,8 @@ public class Game {
 	    }
 	}
 
-	private static void drawHangmanFrame() {}
+	private void drawHangmanFrame() {
+	}
 
 	public void makeMove(String letter) {
 		log("\nin makeMove: " + letter.toLowerCase());
